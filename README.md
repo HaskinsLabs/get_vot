@@ -47,7 +47,7 @@ Additional information can be found at the beginning of each procedure.
 
 ---
 
-### Contents
+### Contents:
 
 * **get_vot.praat** is the main VOT procedure script to return VOT, given Praat tiers with appropriate labels
 * **prepopulate.praat** adds 'Phone' tier if not exist and prepopulates 'Phone' tier with 4 equidistant labels (i.e. VDCLO VLCLO REL ASP)
@@ -55,3 +55,18 @@ Additional information can be found at the beginning of each procedure.
 * **example_prepopulate** includes an example TextGrid file for **prepopulate.praat**
 * **example_result** has result files from **get_vot.praat** and example wav file
 
+---
+
+### Example:
+
+#### get_vot.praat
+* Download all files (or git clone)
+* Open get_vot.praat
+* Set parameters (e.g. tier numbers, labels)
+* Run
+
+#### prepopulate.praat
+* Download all files (or git clone)
+* Open prepopulate.praat
+* Set parameters (e.g. new tier number for Phone tier)
+* Run
