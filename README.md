@@ -44,3 +44,14 @@ the label "mVOT" (for "minus VOT").  A .csv file can also be created with these 
 There, choose UTF-8 so that the file will open properly in Excel.
 
 Additional information can be found at the beginning of each procedure.
+
+---
+
+### Contents
+
+* **get_vot.praat** is the main VOT procedure script to return VOT, given Praat tiers with appropriate labels
+* **prepopulate.praat** adds 'Phone' tier if not exist and prepopulates 'Phone' tier with 4 equidistant labels (i.e. VDCLO VLCLO REL ASP)
+* **example_getvot** includes an example TextGrid file for **get_vot.praat**
+* **example_prepopulate** includes an example TextGrid file for **prepopulate.praat**
+* **example_result** has result files from **get_vot.praat** and example wav file
+
