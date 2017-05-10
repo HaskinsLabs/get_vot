@@ -41,7 +41,7 @@ Positive VOTs will have the label "VOT", while negative VOTs (prevoicing) will h
 the label "mVOT" (for "minus VOT").  A .csv file can also be created with these values.
 
   **Note**: Before creating a .csv file, go to Praat -> Preferences -> Text writing preferences.
-There, choose UTF-8 so that the file will open properly in Excel.
+There, choose UTF-8 so that the file will open properly in Excel. If still some fonts are not appearing properly, use Import option on Excel and import the .csv file with UTF-8 setting.
 
 Additional information can be found at the beginning of each procedure.
 
