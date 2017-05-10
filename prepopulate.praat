@@ -23,9 +23,9 @@
 form prepopulate.praat
 	comment This script prepopulates Phone tier with the following labels
 	comment >> VDCLO VLCLO REL ASP
-	comment - 'File directory' must contain all *.TextGrid files
-	comment - New TextGrids will have "_new" appeared to file name
-	comment >> E.g. VOT_examples_new.TextGrid
+	comment - In File directory, provide all the TextGrids you want to prepopulate
+	comment - New TextGrids will have "_new" appended to file name
+	comment >> E.g. VOT_examples_phone.TextGrid
 	comment File directory (e.g. /Users/exp/vot )
 		text Directory ./example_prepopulate
 	comment Segment tier number
@@ -33,7 +33,7 @@ form prepopulate.praat
 	comment Output Phone tier number
 		positive Phone_tier 3
 	comment Define segments to prepopulate (separated by comma, no space)
-		word segments b,d,g,p,t,k,pʰ,tʰ,kʰ,s,sʰ
+		word segments b,d,g,p,t,k
 endform
 
 #############################################################################
@@ -48,7 +48,7 @@ num_files = Get number of strings
 
 # no textgrid files in the directory
 if num_files = 0
-	exitScript: "No TextGrid files in the directory. Check your direcotry"
+	exitScript: "No TextGrid files in the directory. Check your directory"
 endif
 
 # Prepare info window
@@ -73,7 +73,7 @@ for ifile from 1 to num_files
 	
 	isSegTierIntv = Is interval tier... segment_tier
 	if isSegTierIntv <> 1
-		exitScript: "Segment tier (tier number=", segment_tier, ") is point tier; it should to be an interval tier."
+		exitScript: "Segment tier (tier number=", segment_tier, ") is point tier; it should be an interval tier."
 	endif
 
 	# Insert Phone tier
@@ -115,7 +115,7 @@ for ifile from 1 to num_files
 
 	# Save textgrid
 	select tgName
-	Save as text file... 'directory$'/'tgname$'_new.TextGrid
+	Save as text file... 'directory$'/'tgname$'_phone.TextGrid
 	Remove
 endfor
 

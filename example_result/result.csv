@@ -1,20 +1,16 @@
 Filename,Source,Word,V_pre,Segment,V_post,VOT_beg,VOT_end,VOT,CLO 
 VOT_examples,English DHW,ga,NA,g,a,255.2,116.6,-138.6,138.6 
-VOT_examples,English DHW,ga,NA,g,a,1247.8,1264.7,16.9,0 
-VOT_examples,English DHW,ka,NA,k,a,2110.4,2157.1,46.7,0 
+VOT_examples,English DHW,ga,NA,g,a,1247.8,1264.7,16.9,-999.0 
+VOT_examples,English DHW,ka,NA,k,a,2110.4,2157.1,46.7,-999.0 
 VOT_examples,English DHW,ga,NA,g,a,2959.7,2763.0,-196.6,196.6 
-VOT_examples,English DHW,ka,NA,k,a,3724.5,3779.4,55.0,0 
-VOT_examples,English DHW,books,NA,b,ʊ,4596.9,4605.9,8.9,0 
+VOT_examples,English DHW,ka,NA,k,a,3724.5,3779.4,55.0,-999.0 
+VOT_examples,English DHW,books,NA,b,ʊ,4596.9,4605.9,8.9,-999.0 
 VOT_examples,English DHW,two books,NA,b,ʊ,5446.1,5379.1,-67.0,67.0 
 VOT_examples,English DHW,tugging,NA,g,i,6381.1,6333.6,-47.5,47.5 
 VOT_examples,English DHW,tucking,NA,k,i,6916.1,6944.1,28.0,62.4 
 VOT_examples,ASA: L2 Thai L2 Sgaw,aba,a,b,a,7941.8,7779.6,-162.1,162.1 
 VOT_examples,ASA: L2 Thai L2 Sgaw,apa,a,p,a,8822.8,8834.1,11.3,171.5 
-VOT_examples,ASA: L2 Thai L2 Sgaw,apʰa,a,pʰ,a,9687.6,9747.9,60.3,134.5 
-VOT_examples,ASA: L2 Thai L2 Sgaw,sa,NA,s,a,10993.8,11000.0,6.3,194.5 
-VOT_examples,ASA: L2 Thai L2 Sgaw,sʰa,NA,sʰ,a,11941.3,12015.0,73.7,180.4 
 VOT_examples,Thai: UCLA,dam,NA,d,a,13215.5,13127.2,-88.3,88.3 
-VOT_examples,Thai: UCLA,tam,NA,t,a,14273.8,14290.7,16.9,0 
-VOT_examples,Thai: UCLA,tʰam,NA,tʰ,a,15171.0,15253.2,82.2,0 
+VOT_examples,Thai: UCLA,tam,NA,t,a,14273.8,14290.7,16.9,-999.0 
 VOT_examples,Malagasy Howe,bao,NA,b,ao,16843.7,16713.5,-130.2,130.2 
 VOT_examples,Malagasy Howe,bo,NA,b,o,17909.6,17583.3,-326.3,326.3 

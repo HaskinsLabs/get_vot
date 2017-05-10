@@ -8,17 +8,19 @@
 #   2: A tier (default label is "Segment") with phoneme-size segments marked
 #   3: A tier (default label is "Phone") with acoustic intervals relevant to VOT
 #      see below and Abramson & Whalen (submitted) for details
-#   (4: The example has a tier "Source", to indicated where the sounds came from:
+#   (4: The example has a tier "Source", to indicate where the sounds came from:
 #       English DHW: speaker: D. H. Whalen
 #       ASA, L2 Thai, L2 Sgaw: speaker: Arthur Abramson
 #       Thai: UCLA: http://archive.phonetics.ucla.edu/Language/THA/tha.html
 #       Malagasy Howe: provided by Penelope Howe from her field recordings
 # If requested, a new tier (default name is "VOT") with intervals marking the final
 #   value calculated for VOT ("VOT" is positive, "mVOT" is negative).
+# If requested, a new tier (default name is "CLO") including closure intervals (labeled as "CLO")
+#   will be created
 #
 #  The segments that are looked for by default are in the Define segments for VOT result:
 #	comment Define segments for VOT result (separated by comma without space)
-#		word segments b,d,g,p,t,k,pʰ,tʰ,kʰ,s,sʰ
+#		word segments b,d,g,p,t,k
 #  Edit this line if there are more or fewer segments of interest; the list can be
 #    entered on execution as well (for example, if you want to do a separate run
 #    for each stop).
@@ -45,7 +47,7 @@
 #   It would make sense to mark such (presumably rare) cases for special handling.
 # ASP, aspiration, is the period from the end of REL to the onset of second V (if present)
 #   or simply the end of aspiration if second V is not marked (or not present).
-#   Note that overlapping between voicing and aspiration should be marked consistently
+#   Note that the overlap between voicing and aspiration should be marked consistently
 #   as either belonging to the vocalic segment or the aspiration.
 # second V, the following vocalic segment, is optionally present.  It's onset is the end
 #   of ASP or, if there is no ASP, REL.
@@ -60,7 +62,7 @@
 #    line 217, "nowarn Read from file... "
 #    line 670, "Save as text file... "
 #    (Also, change directory on the GUI prompt)
-# - For file encoding, make sure setting "Text writing preferences" as "UTF-8" on Praat.
+# - For file encoding, make sure to set "Text writing preferences" as "UTF-8" on Praat.
 # - If IPA symbols are not showing properly on the result file (.csv), 
 #   use 'import -> CSV file' option and choose UTF-8 encoding on MS Excel.
 
@@ -69,11 +71,11 @@
 
 form get_vot.praat
 	comment << Praat procedure for VOT measurement >>
-	comment - 'File directory' must contain all *.TextGrid files
-	comment - New TextGrids will have "_new" appeared to file name
+	comment - In File directory, provide all the TextGrids you want to prepopulate
+	comment - New TextGrids will have "_vot" appended to file name
 	comment File directory (e.g. /Users/exp/vot )
 		text Directory ./example_getvot
-	comment Result file directory (e.g. /Users/exp/vot/result.csv )
+	comment Result file name with directory (e.g. /Users/exp/vot/result.csv )
 		text Resultfile ./example_getvot/result.csv
 	comment Define percentage of closure that must be voiced (VDCLO) 
 	comment for VOT to be negative (0-100; default, 50)
@@ -84,10 +86,12 @@ form get_vot.praat
 		positive Phone_tier 3
 		positive Source_tier 4
 	comment Define segments for VOT result (separated by comma without space)
-		word segments b,d,g,p,t,k,pʰ,tʰ,kʰ,s,sʰ
+		word segments b,d,g,p,t,k
 	comment Make VOT output tier?
+	comment - VOT tier will be appended at the end with VOT intervals only 
 		boolean VOT_output
 	comment Make CLO output tier?
+	comment - CLO tier will be appended at the end with closure intervals only
 		boolean CLO_output
 endform
 
@@ -110,7 +114,7 @@ num_files = Get number of strings
 
 # no textgrid files in the directory
 if num_files = 0
-	exitScript: "No TextGrid files in the directory. Check your direcotry"
+	exitScript: "No TextGrid files in the directory. Check your directory"
 endif
 
 # Prepare info window
@@ -538,7 +542,7 @@ for ifile from 1 to num_files
 						# << Condition: If VLCLO is too >>
 						if vlclo_idx <> 0
 							
-							# << Condition: If VDCLO>VLCLO, VOT=beg of VDCLO to beg REL >>
+							# << Condition: If VDCLO > closure*percent_voicing/100, VOT=beg of VDCLO to beg REL >>
 							if vdclo_dur > (vlclo_dur + vdclo_dur)*percent_voicing/100
 								vot_beg = rel_beg
 								vot_end = vdclo_beg
@@ -657,6 +661,12 @@ for ifile from 1 to num_files
 						endif
 					endif
 
+					# If the closure duration is not measured,
+					# set clo to be -999 instead of 0
+					if clo = 0
+						clo = -999
+					endif
+
 					# Write to result file
 					# show one digit after the decimal point
 					vot_beg_time$ = fixed$(vot_beg*1000,1)
@@ -674,7 +684,7 @@ for ifile from 1 to num_files
 	# Save textgrid
 	if (vOT_output == 1) or (cLO_output == 1)
 		select newTg
-		Save as text file... 'directory$'/'tgname$'_new.TextGrid
+		Save as text file... 'directory$'/'tgname$'_vot.TextGrid
 		Remove
 	endif
 
