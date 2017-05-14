@@ -54,7 +54,7 @@
 #
 #  The output can select which stop will be reported, using the IPA symbols in Praat.
 #  
-# Operating systems:
+# ** Operating systems **
 # - This script was tested on macOS Sierra
 # - For Window OS users, change directory settings in ...
 #    line 91, "Create Strings as file list... "
@@ -62,9 +62,11 @@
 #    line 217, "nowarn Read from file... "
 #    line 670, "Save as text file... "
 #    (Also, change directory on the GUI prompt)
-# - For file encoding, make sure to set "Text writing preferences" as "UTF-8" on Praat.
+#
+# ** File encoding **
+# - Make sure to set "Text writing preferences" as "UTF-8" on Praat.
 # - If IPA symbols are not showing properly on the result file (.csv), 
-#   use 'import -> CSV file' option and choose UTF-8 encoding on MS Excel.
+#   use 'import -> CSV file' option and choose UTF-8 encoding on MS Excel program.
 
 #############################################################################
 #---- GUI window ----#
@@ -75,7 +77,7 @@ form get_vot.praat
 	comment - New TextGrids will have "_vot" appended to file name
 	comment File directory (e.g. /Users/exp/vot )
 		text Directory ./example_getvot
-	comment Result file name with directory (e.g. /Users/exp/vot/result.csv )
+	comment Result file name with directory (e.g. /Users/exp/vot/result.csv)
 		text Resultfile ./example_getvot/result.csv
 	comment Define percentage of closure that must be voiced (VDCLO) 
 	comment for VOT to be negative (0-100; default, 50)
@@ -128,7 +130,7 @@ printline Num of TextGrids: 'num_files'
 printline
 
 # Prepare header for result file
-titleline$ = "Filename,Source,Word,V_pre,Segment,V_post,VOT_beg,VOT_end,VOT,CLO"
+titleline$ = "Filename,Source,Word,V_pre,V_pre_dur,Segment,V_post,V_post_dur,VOT_beg,VOT_end,VOT,CLO"
 fileappend "'resultfile$'" 'titleline$' 'newline$'
 
 #############################################################################
@@ -361,6 +363,10 @@ for ifile from 1 to num_files
 					possible_vowel_cnt = 0
 					pre_vowel = 0
 					post_vowel = 0
+					v_pre$ = "v_pre$"
+					v_post$ = "v_post$"
+					v_pre_dur = -0.999
+					v_post_dur = -0.999
 					
 					for iSeg from allLabelBegIntNum to allLabelEndIntNum
 						seg_lab$ = Get label of interval... phone_tier iSeg
@@ -383,30 +389,33 @@ for ifile from 1 to num_files
 						pre_vowel_mid = pre_vowel_beg + (pre_vowel_end - pre_vowel_beg)/2
 						pre_vowel_interval = Get interval at time... segment_tier pre_vowel_mid
 						v_pre$ = Get label of interval... segment_tier pre_vowel_interval
-						v_post$ = "NA"
+						v_post$ = "v_post$"
+						v_pre_dur = pre_vowel_end - pre_vowel_beg
+
 					elif possible_vowel_cnt = 1 and pre_vowel = 0 and post_vowel = 1
-						v_pre$ = "NA"
+						v_pre$ = "v_pre$"
 						post_vowel_beg = Get starting point... phone_tier post_vowel_idx
 						post_vowel_end = Get end point... phone_tier post_vowel_idx
 						post_vowel_mid = post_vowel_beg + (post_vowel_end - post_vowel_beg)/2
 						post_vowel_interval = Get interval at time... segment_tier post_vowel_mid
 						v_post$ = Get label of interval... segment_tier post_vowel_interval
+						v_post_dur = post_vowel_end - post_vowel_beg
+
 					elif possible_vowel_cnt = 2 and pre_vowel = 1 and post_vowel = 1
 						pre_vowel_beg = Get starting point... phone_tier pre_vowel_idx
 						pre_vowel_end = Get end point... phone_tier pre_vowel_idx
 						pre_vowel_mid = pre_vowel_beg + (pre_vowel_end - pre_vowel_beg)/2
 						pre_vowel_interval = Get interval at time... segment_tier pre_vowel_mid
 						v_pre$ = Get label of interval... segment_tier pre_vowel_interval
+						v_pre_dur = pre_vowel_end - pre_vowel_beg
+
 						post_vowel_beg = Get starting point... phone_tier post_vowel_idx
 						post_vowel_end = Get end point... phone_tier post_vowel_idx
 						post_vowel_mid = post_vowel_beg + (post_vowel_end - post_vowel_beg)/2
 						post_vowel_interval = Get interval at time... segment_tier post_vowel_mid
 						v_post$ = Get label of interval... segment_tier post_vowel_interval
+						v_post_dur = post_vowel_end - post_vowel_beg
 					endif
-
-				elif possible_phone_sequence = 0
-					v_pre$ = "NA"
-					v_post$ = "NA"
 				endif
 
 				
@@ -561,13 +570,6 @@ for ifile from 1 to num_files
 						else
 
 						# << Condition: If VLCLO is not within WORD >>
-							# if asp_idx <> 0
-							# 	vot_beg = rel_beg
-							# 	vot_end = vdclo_beg
-							# else
-							# 	vot_beg = rel_beg
-							# 	vot_end = rel_end
-							# endif
 							vot_beg = rel_beg
 							vot_end = vdclo_beg
 						endif
@@ -595,11 +597,6 @@ for ifile from 1 to num_files
 							clo_end = rel_beg
 						endif
 					endif
-
-					# # set clo_end as vdclo_end if length(VDCLO) > length(VLCLO)
-					# if vdclo_as_clo = 1
-					# 	clo_end = vdclo_end
-					# endif
 
 					# Calculate VOT and CLO
 					vot = vot_end - vot_beg
@@ -673,8 +670,10 @@ for ifile from 1 to num_files
 					vot_end_time$ = fixed$(vot_end*1000,1)
 					vot$ = fixed$(vot,1)
 					clo$ = fixed$(clo,1)
+					v_pre_dur$ = fixed$(v_pre_dur*1000,1)
+					v_post_dur$ = fixed$(v_post_dur*1000,1)
 
-					resultline$ = "'tgname$','source_result$','word$','v_pre$','segment_result$','v_post$','vot_beg_time$','vot_end_time$','vot$','clo$'"
+					resultline$ = "'tgname$','source_result$','word$','v_pre$','v_pre_dur$','segment_result$','v_post$','v_post_dur$','vot_beg_time$','vot_end_time$','vot$','clo$'"
 					fileappend "'resultfile$'" 'resultline$' 'newline$'
 				endif
 			endif
